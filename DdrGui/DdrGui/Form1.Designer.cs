@@ -37,6 +37,10 @@ namespace DdrGui
             this.tbl_TargetZone = new System.Windows.Forms.TableLayoutPanel();
             this.hz_Top = new System.Windows.Forms.Panel();
             this.hz_Bottom = new System.Windows.Forms.Panel();
+            this.lbl_ScoreHeader = new System.Windows.Forms.Label();
+            this.lbl_Score = new System.Windows.Forms.Label();
+            this.lbl_StreakHeader = new System.Windows.Forms.Label();
+            this.lbl_Streak = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.img_TargetLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.img_TargetUp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.img_TargetDown)).BeginInit();
@@ -143,11 +147,55 @@ namespace DdrGui
             this.hz_Bottom.Size = new System.Drawing.Size(200, 5);
             this.hz_Bottom.TabIndex = 7;
             // 
+            // lbl_ScoreHeader
+            // 
+            this.lbl_ScoreHeader.AutoSize = true;
+            this.lbl_ScoreHeader.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lbl_ScoreHeader.Location = new System.Drawing.Point(12, 13);
+            this.lbl_ScoreHeader.Name = "lbl_ScoreHeader";
+            this.lbl_ScoreHeader.Size = new System.Drawing.Size(78, 32);
+            this.lbl_ScoreHeader.TabIndex = 8;
+            this.lbl_ScoreHeader.Text = "Score:";
+            // 
+            // lbl_Score
+            // 
+            this.lbl_Score.AutoSize = true;
+            this.lbl_Score.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lbl_Score.Location = new System.Drawing.Point(96, 13);
+            this.lbl_Score.Name = "lbl_Score";
+            this.lbl_Score.Size = new System.Drawing.Size(27, 32);
+            this.lbl_Score.TabIndex = 9;
+            this.lbl_Score.Text = "0";
+            // 
+            // lbl_StreakHeader
+            // 
+            this.lbl_StreakHeader.AutoSize = true;
+            this.lbl_StreakHeader.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lbl_StreakHeader.Location = new System.Drawing.Point(12, 54);
+            this.lbl_StreakHeader.Name = "lbl_StreakHeader";
+            this.lbl_StreakHeader.Size = new System.Drawing.Size(84, 32);
+            this.lbl_StreakHeader.TabIndex = 10;
+            this.lbl_StreakHeader.Text = "Streak:";
+            // 
+            // lbl_Streak
+            // 
+            this.lbl_Streak.AutoSize = true;
+            this.lbl_Streak.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lbl_Streak.Location = new System.Drawing.Point(102, 54);
+            this.lbl_Streak.Name = "lbl_Streak";
+            this.lbl_Streak.Size = new System.Drawing.Size(27, 32);
+            this.lbl_Streak.TabIndex = 11;
+            this.lbl_Streak.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1583, 1132);
+            this.Controls.Add(this.lbl_Streak);
+            this.Controls.Add(this.lbl_StreakHeader);
+            this.Controls.Add(this.lbl_Score);
+            this.Controls.Add(this.lbl_ScoreHeader);
             this.Controls.Add(this.hz_Bottom);
             this.Controls.Add(this.hz_Top);
             this.Controls.Add(this.tbl_TargetZone);
@@ -160,6 +208,7 @@ namespace DdrGui
             ((System.ComponentModel.ISupportInitialize)(this.img_TargetSpin)).EndInit();
             this.tbl_TargetZone.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -173,6 +222,10 @@ namespace DdrGui
         private System.Windows.Forms.TableLayoutPanel tbl_TargetZone;
         private System.Windows.Forms.Panel hz_Top;
         private System.Windows.Forms.Panel hz_Bottom;
+        private System.Windows.Forms.Label lbl_ScoreHeader;
+        private System.Windows.Forms.Label lbl_Score;
+        private System.Windows.Forms.Label lbl_StreakHeader;
+        private System.Windows.Forms.Label lbl_Streak;
     }
 }
 

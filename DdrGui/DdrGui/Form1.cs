@@ -35,11 +35,16 @@ namespace DdrGui
         readonly QueueThread _feedbackThread;
         readonly QueueThread<ArrowDir> _userInputHandlerThread;
         readonly CancelThread<object> _gamepadThread;
+        int _score = 0;
+        int _streak = 0;
+
 
         public Form1(IArdNetSystem ArdSystem, SerialPort GamepadPort)
         {
             this._ardSystem = ArdSystem;
             this._gamepadPort = GamepadPort;
+
+            ArdSystem.TcpCommandTable.Register("SPIN", ArdNetSpinSensor);
 
             InitializeComponent();
             tbl_TargetZone.LocationChanged += OnSizeChangedHandler;
@@ -226,7 +231,7 @@ namespace DdrGui
                         }
                     });
                 }
-                catch (ObjectDisposedException ex)
+                catch (ObjectDisposedException)
                 {
                     //noop
                 }
@@ -236,6 +241,11 @@ namespace DdrGui
             }
         }
 
+
+        private void ArdNetSpinSensor(IArdNetSystem sender, RequestResponderStateObject request)
+        {
+            _ = _userInputHandlerThread.Enqueue(ArrowDir.Spin);
+        }
 
         private void GamepadInputHandler(object State, CancellationToken Token)
         {
@@ -258,8 +268,7 @@ namespace DdrGui
                         continue;
                     }
 
-                    MessageBox.Show(dir.ToString());
-                    _ = _userInputHandlerThread.Enqueue(dir);
+                    _ = _userInputHandlerThread.Enqueue(dir, Token);
                 }
             }
             catch (OperationCanceledException)
@@ -292,13 +301,17 @@ namespace DdrGui
                             {
                                 state.IsHit = true;
                                 didHit = true;
+                                _score += 10;
+                                lbl_Score.AutoInvoke(x => x.Text = _score.ToString());
+                                _streak += 1;
+                                lbl_Streak.AutoInvoke(x => x.Text = _streak.ToString());
                                 break;
                             }
                         }
                     }
                 });
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 //noop
             }
@@ -312,7 +325,11 @@ namespace DdrGui
 
         private void NoteMissed()
         {
-
+            _score -= 10;
+            lbl_Score.AutoInvoke(x => x.Text = _score.ToString());
+            _streak = 0;
+            lbl_Streak.AutoInvoke(x => x.Text = _streak.ToString());
+            _ardSystem.SendTcpCommand("VIBE");
         }
     }
 

@@ -39,7 +39,7 @@ namespace DdrGui
             using (var gamepadPort = new SerialPort("COM15", 921600))
             {
                 gamepadPort.Open();
-                using (ArdNetServer ardServer = new ArdNetServer(config, hub))
+                using (ArdNetServer ardServer = ArdNetServer.StartNew(config, hub))
                 {
                     Application.Run(new Form1(ardServer, gamepadPort));
                 }
