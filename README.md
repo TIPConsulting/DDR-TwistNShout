@@ -2,6 +2,8 @@
 
 This new spin on the classic DDR experience is perfect for the headache enthusiast!  The dance pads you know and love have been augmented with a new spin movement and "streak incentivizer".
 
+The game plays similarly to DDR, with a twist.  Players have to step on the pads or spin as notes fall down the screen.  If the player misses any notes, then a vibrating headband will “remind” them to be more careful.
+
 ![Gamepad](https://raw.githubusercontent.com/TIPConsulting/DDR-TwistNShout/master/Documents/Gamepad.jpg)
 
 ## Hardware
