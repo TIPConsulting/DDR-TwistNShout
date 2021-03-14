@@ -1,4 +1,5 @@
 ﻿using ArdNet;
+using ArdNet.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,7 +21,7 @@ namespace DdrGui
 {
     public partial class Form1 : Form
     {
-        readonly IArdNetSystem _ardSystem;
+        readonly IArdNetServer _ardSystem;
         readonly SerialPort _gamepadPort;
         readonly CancellationTokenSource _tokenSrc = new();
         readonly PictureBox[] _targetArrows;
@@ -28,9 +29,9 @@ namespace DdrGui
         readonly CancelThread<object> _tickThread;
         readonly object _scrollingArrowLock = new();
         readonly List<PictureBox> _scrollingArrows = new();
-        readonly int _tickSpeed = 100;
+        readonly int _tickSpeed = 200;
         readonly int _tickSize;
-        readonly int _tickTopTolerance = 2;
+        readonly int _tickTopTolerance = 3;
         readonly int _tickBtmTolerance = 4;
         readonly QueueThread _feedbackThread;
         readonly QueueThread<ArrowDir> _userInputHandlerThread;
@@ -39,7 +40,7 @@ namespace DdrGui
         int _streak = 0;
 
 
-        public Form1(IArdNetSystem ArdSystem, SerialPort GamepadPort)
+        public Form1(IArdNetServer ArdSystem, SerialPort GamepadPort)
         {
             this._ardSystem = ArdSystem;
             this._gamepadPort = GamepadPort;
@@ -157,14 +158,38 @@ namespace DdrGui
             }
 
             var lastDir = -1;
+            int dirVal = -1;
 
             while (!Token.IsCancellationRequested && !IsDisposed)
             {
-                int dirVal;
+                if (_ardSystem.ConnectedClientCount == 0)
+                {
+                    goto LoopTerminal;
+                }
 
                 do
                 {
-                    dirVal = Thread.CurrentThread.LocalRandom().Next(0, (int)ArrowDir.MAX);
+                    int tmpDir = Thread.CurrentThread.LocalRandom().Next(0, 22);
+                    if (tmpDir < 5)
+                    {
+                        dirVal = (int)ArrowDir.Left;
+                    }
+                    else if (tmpDir < 10)
+                    {
+                        dirVal = (int)ArrowDir.Up;
+                    }
+                    else if (tmpDir < 15)
+                    {
+                        dirVal = (int)ArrowDir.Down;
+                    }
+                    else if (tmpDir < 20)
+                    {
+                        dirVal = (int)ArrowDir.Right;
+                    }
+                    else
+                    {
+                        dirVal = (int)ArrowDir.Spin;
+                    }
                 }
                 while (dirVal == lastDir);
                 lastDir = dirVal;
@@ -178,9 +203,17 @@ namespace DdrGui
                         pic.BringToFront();
                     }
                 });
-                var waitTime = Thread.CurrentThread.LocalRandom().Next(0, 1500);
-                var bonusWait = dirVal == (int)ArrowDir.Spin ? 750 : 0;
-                _ = Token.WaitHandle.WaitOne(500 + waitTime + bonusWait);
+
+            LoopTerminal:
+                if (dirVal == (int)ArrowDir.Spin)
+                {
+                    _ = Token.WaitHandle.WaitOne(3000);
+                }
+                else
+                {
+                    var waitTime = Thread.CurrentThread.LocalRandom().Next(1000, 2000);
+                    _ = Token.WaitHandle.WaitOne(waitTime);
+                }
             }
         }
 
@@ -206,7 +239,9 @@ namespace DdrGui
                                 var pic = _scrollingArrows[i];
                                 var state = (ArrowState)pic.Tag;
                                 pic.Top += _tickSize;
-                                if (state.IsHit || pic.Top > (tbl_TargetZone.Top + _tickSize * _tickBtmTolerance))
+                                if (state.IsHit
+                                || (state.Direction != ArrowDir.Spin && (pic.Top > (tbl_TargetZone.Top + _tickSize * _tickBtmTolerance)))
+                                || (state.Direction == ArrowDir.Spin && (pic.Top > (tbl_TargetZone.Top + _tickSize * _tickBtmTolerance * 2))))
                                 {
                                     deleteList.Add(i);
                                 }
@@ -259,10 +294,13 @@ namespace DdrGui
                     {
                         "T8" => ArrowDir.Left,
                         "T7" => ArrowDir.Up,
-                        "T6" => ArrowDir.Down,
-                        "T5" => ArrowDir.Right,
+                        "T5" => ArrowDir.Down,
+                        "T6" => ArrowDir.Right,
                         _ => ArrowDir.MAX
                     };
+
+                    //MessageBox.Show(dir.ToString());
+                    
                     if (dir == ArrowDir.MAX)
                     {
                         continue;
@@ -297,7 +335,11 @@ namespace DdrGui
                                 continue;
                             }
 
-                            if (pic.Top > (tbl_TargetZone.Top - _tickSize * _tickTopTolerance) && pic.Top <= (tbl_TargetZone.Top + _tickSize * _tickBtmTolerance))
+                            bool isTopGood = pic.Top > (tbl_TargetZone.Top - _tickSize * _tickTopTolerance);
+                            bool isBottomGood = (state.Direction != ArrowDir.Spin && (pic.Top <= (tbl_TargetZone.Top + _tickSize * _tickBtmTolerance)))
+                                                || (state.Direction == ArrowDir.Spin && (pic.Top <= (tbl_TargetZone.Top + _tickSize * _tickBtmTolerance * 2)));
+
+                            if (isTopGood && isBottomGood)
                             {
                                 state.IsHit = true;
                                 didHit = true;
@@ -316,10 +358,10 @@ namespace DdrGui
                 //noop
             }
 
-            if (!didHit)
-            {
-                _ = _feedbackThread.Enqueue(() => NoteMissed());
-            }
+            //if (!didHit)
+            //{
+            //    _ = _feedbackThread.Enqueue(() => NoteMissed());
+            //}
         }
 
 

@@ -23,7 +23,7 @@ namespace DdrGui
             Application.SetCompatibleTextRenderingDefault(false);
 
 
-            var hub = new MessageHub();
+            var hub = MessageHub.StartNew();
             var udp = new ArdNetServerUdpConfig("DDRTwistNShout", 7348);
             var tcp = new ArdNetServerTcpConfig(7348)
             {
