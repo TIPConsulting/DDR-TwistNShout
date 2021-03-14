@@ -22,7 +22,14 @@ I knew I would need a wireless connection to let players move freely while they 
 
 ## Design
 
-The project has 3 components, the UI, the gamepad, and the wearable.
+The project has 3 components, the UI, the gamepad, and the wearable.  These components (and the integrations linking them) represent several significant technical features
+
+- Windows GUI
+- Microcontroller code (both C# and C++)
+- WiFi integration
+- Serial integration
+- Realtime bidirectional communication
+- Motion sensing
 
 ### UI
 
