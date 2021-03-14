@@ -46,7 +46,7 @@ Since spinning is such an important aspect of this game, I thought that socks mi
 
 ### Wearable
 
-The wearable has 2 jobs - (1) gently remind the user to hit the proper notes, and (2) detect spinning motions.  To save some time on this project, I reused the glove from HairTrigger since its already configured with an ESP32 and gyro.  I then made a headband with a vibrator and LED, and joined them together with some long wires.
+The wearable has 2 jobs (1) gently remind the user to hit the proper notes, and (2) detect spinning motions.  To save some time on this project, I reused the glove from HairTrigger since its already configured with an ESP32 and gyro.  I then made a headband with a vibrator and LED, and joined them together with some long wires.
 
 The controller detects sustained spinning motions to figure out if the user is moving.  If it detects a large enough spin, it sends a signal to the game host over WiFi.  Similarly, when the player misses notes in the game, the gamehost sends a command to the wearable to activate the vibrator.
 
