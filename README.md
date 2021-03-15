@@ -4,7 +4,7 @@ This new spin on the classic DDR experience is perfect for the headache enthusia
 
 The game plays similarly to DDR, with a twist.  Players have to step on the pads or spin as notes fall down the screen.  If the player misses any notes, then a vibrating headband will “remind” them to be more careful.
 
-![Gamepad](https://raw.githubusercontent.com/TIPConsulting/DDR-TwistNShout/master/Documents/Gamepad.jpg)
+![Diagram](https://raw.githubusercontent.com/TIPConsulting/DDR-TwistNShout/master/Documents/Gamepad.jpg)
 
 ## Hardware
 - 2x ESP32 microcontrollers
@@ -32,6 +32,8 @@ The project has 3 components, the UI, the gamepad, and the wearable.  These comp
 - Serial integration
 - Realtime bidirectional communication
 - Motion sensing
+
+![Diagram](https://raw.githubusercontent.com/TIPConsulting/DDR-TwistNShout/master/Documents/TwistNShout.jpg)
 
 ### UI
 
